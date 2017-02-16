@@ -27,14 +27,14 @@ protected:
   rtabmap::Transform lastOdomPose_;
 	rtabmap::Transform odometryCorrection_;
 
-  void processStatitics(const rtabmap::Statistics &stats);
-
-  void processOdometry( const rtabmap::SensorData &data,
-                        rtabmap::Transform pose,
-                        const rtabmap::OdometryInfo &odom);
+  // void processStatitics(const rtabmap::Statistics &stats);
+  //
+  // void processOdometry( const rtabmap::SensorData &data,
+  //                       rtabmap::Transform pose,
+  //                       const rtabmap::OdometryInfo &odom);
 
 private:
-
+//
   int camera_iteration;
   int odometry_update;
   int odometry_iteratrion;

@@ -1,5 +1,6 @@
 #include "MapBuilder.hpp"
 #include <rtabmap/core/util3d.h>
+#include <rtabmap/core/OdometryInfo.h>
 
 namespace rgbd_slam{
 
@@ -32,17 +33,17 @@ MapBuilder::~MapBuilder(){
 
 void MapBuilder::mapping(CameraRockRGBD *camera){
 
-  SensorData data = camera->takeImage();
+  rtabmap::SensorData data = camera->takeImage();
 
   if(data.isValid()){
     if((camera_iteration++ % odometry_update) == 0){
       rtabmap::OdometryInfo info;
-      rtabmap::Transform pose = odom.process(data, &info);
+      rtabmap::Transform pose = odometry_->process(data, &info);
 
       if((odometry_iteratrion++ % mapping_update) == 0) {
-        if(rtabmap.process(data, pose)) {
+        if(rtabmap_->process(data, pose)) {
           // mapBuilder.processStatistics(rtabmap.getStatistics());
-          if(rtabmap.getLoopClosureId() > 0)
+          if(rtabmap_->getLoopClosureId() > 0)
             std::cout << "Loop closure detected!" << std::endl;
           }
         }
@@ -53,8 +54,8 @@ void MapBuilder::mapping(CameraRockRGBD *camera){
 
 };
 
-void MapBuilder::processStatitics(const rtabmap::Statistics &stats){
-
+// void MapBuilder::processStatitics(const rtabmap::Statistics &stats){
+//
   //============================
   // Add RGB-D clouds
   //============================
@@ -137,52 +138,51 @@ void MapBuilder::processStatitics(const rtabmap::Statistics &stats){
   //
   // }
   //
+// }
 
-}
-
-void MapBuilder::processOdometry( const rtabmap::SensorData &data,
-                                  rtabmap::Transform pose,
-                                  const rtabmap::OdometryInfo &odom){
-
-  if(pose.isNull())
-    pose = lastOdomPose_; //Odometry lost
-  else{
-    lastOdomPose_ = pose; //Start odometry
-
-    // 3d cloud
-    if(data.depthOrRightRaw().cols == data.imageRaw().cols &&
-       data.depthOrRightRaw().rows == data.imageRaw().rows &&
-       !data.depthOrRightRaw().empty() &&
-       (data.stereoCameraModel().isValidForProjection() ||
-          data.cameraModels().size())){
-
-      pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
-      cloud = rtabmap::util3d::cloudRGBFromSensorData( data,
-                                                        CLOUD_DECIMATION,
-                                                        CLOUD_MAX_DEPTH);
-      // need add all cloud, look rtabmap cloudViewer addCloud Function
-      }
-    }
-}
-
-
-bool MapBuilder::addCloud(  const std::string &id,
-                            const pcl::PCLPointCloud2Ptr &binaryCloud,
-                            const rtabmap::Transform &pose){
-
-  if(addedClouds_.find(id) != addedClouds_.end()){
-  	removeCloud(id);
-  }
-
-  addedClouds_.insert( std::pair<std::string,rtabmap::Transform>(id,pose));
-  return true;
-}
-
-bool MapBuilder::removeCloud(const std::string &id){
-  auto map_search = addedClouds_.find(id);
-  addedClouds_.erase(map_search); // remove after visualizer
-  return true;
-}
+// void MapBuilder::processOdometry( const rtabmap::SensorData &data,
+//                                   rtabmap::Transform pose,
+//                                   const rtabmap::OdometryInfo &odom){
+//
+//   if(pose.isNull())
+//     pose = lastOdomPose_; //Odometry lost
+//   else{
+//     lastOdomPose_ = pose; //Start odometry
+//
+//     // 3d cloud
+//     if(data.depthOrRightRaw().cols == data.imageRaw().cols &&
+//        data.depthOrRightRaw().rows == data.imageRaw().rows &&
+//        !data.depthOrRightRaw().empty() &&
+//        (data.stereoCameraModel().isValidForProjection() ||
+//           data.cameraModels().size())){
+//
+//       pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+//       cloud = rtabmap::util3d::cloudRGBFromSensorData( data,
+//                                                         CLOUD_DECIMATION,
+//                                                         CLOUD_MAX_DEPTH);
+//       // need add all cloud, look rtabmap cloudViewer addCloud Function
+//       }
+//     }
+// }
+//
+//
+// bool MapBuilder::addCloud(  const std::string &id,
+//                             const pcl::PCLPointCloud2Ptr &binaryCloud,
+//                             const rtabmap::Transform &pose){
+//
+//   if(addedClouds_.find(id) != addedClouds_.end()){
+//   	removeCloud(id);
+//   }
+//
+//   addedClouds_.insert( std::pair<std::string,rtabmap::Transform>(id,pose));
+//   return true;
+// }
+//
+// bool MapBuilder::removeCloud(const std::string &id){
+//   auto map_search = addedClouds_.find(id);
+//   addedClouds_.erase(map_search); // remove after visualizer
+//   return true;
+// }
 
 
 } // namespace rtabmap
