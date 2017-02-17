@@ -16,8 +16,8 @@ public:
   void rtabmapRun(CameraRockRGBD *camera);
   CameraRockRGBD getCameraRGBDRock() const;
 
-  setOdometryUpdate(int odometry_update){odometry_update_ = odometry_update;}
-  setMappingUpdate(int mapping_update){mapping_update_ = mapping_update;}
+  void setOdometryUpdate(int odometry_update){odometry_update_ = odometry_update;}
+  void setMappingUpdate(int mapping_update){mapping_update_ = mapping_update;}
 
 private:
 

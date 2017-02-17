@@ -1,3 +1,3 @@
 rock_library(rgbd_slam
-  SOURCES MapBuilder.cpp CameraRockRGBD.cpp
-  HEADERS MapBuilder.hpp CameraRockRGBD.hpp)
+  SOURCES RtabmapRock.cpp CameraRockRGBD.cpp
+  HEADERS RtabmapRock.hpp CameraRockRGBD.hpp)
