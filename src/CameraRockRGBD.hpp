@@ -1,4 +1,4 @@
-// #pragma once
+#pragma once
 
 #include <rtabmap/core/RtabmapExp.h> // DLL export/import defines
 #include <rtabmap/core/Camera.h>
@@ -39,7 +39,7 @@ protected:
 
 private:
   cv::Mat rgb_image_; // CV_8UC3 data type
-  cv::Mat depth_image_; // CV_16UC1 data type
+  cv::Mat depth_image_; // CV_32UC1 data type in meter
   float max_range_;
   std::string serial_;
 };

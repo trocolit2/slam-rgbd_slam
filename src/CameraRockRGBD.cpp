@@ -38,14 +38,14 @@ bool CameraRockRGBD::isCalibrated() const {
 }
 
 std::string CameraRockRGBD::getSerial() const{
-  return "teste1";
+  return "cameraRockRGBD_";
 }
 
 rtabmap::SensorData CameraRockRGBD::captureImage(rtabmap::CameraInfo *info){
 
   rtabmap::CameraModel model(
-		1.0f/max_range_, //fx
-		1.0f/max_range_, //fy
+		632, //fx
+		348, //fy
 		float(rgb_image_.cols/2) - 0.5f,  //cx
 		float(rgb_image_.rows/2) - 0.5f,  //cy
 		this->getLocalTransform(),
